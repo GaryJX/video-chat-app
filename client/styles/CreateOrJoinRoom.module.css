@@ -1,0 +1,22 @@
+.orDivider {
+  display: flex;
+  align-items: center;
+  margin: 1em 0;
+}
+
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  height: 1px;
+  width: 100%;
+  background-color: currentColor;
+  opacity: 0.15;
+}
+
+.orDivider::before {
+  margin-right: 1em;
+}
+
+.orDivider::after {
+  margin-left: 1em;
+}
