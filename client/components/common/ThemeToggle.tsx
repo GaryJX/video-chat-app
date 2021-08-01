@@ -43,9 +43,11 @@ const ThemeToggle = () => {
   }
 
   return (
-    <button onClick={toggleTheme}>
-      Toggle Theme
-      <FiMoon />
+    <button
+      onClick={toggleTheme}
+      className="p-2 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
+    >
+      {theme === 'light' ? <FiMoon /> : <FiSun />}
     </button>
   )
 }

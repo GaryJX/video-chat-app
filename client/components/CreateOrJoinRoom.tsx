@@ -1,19 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { PuffLoader } from 'react-spinners'
 import Button from '@/components/base/Button'
 import TextInput from '@/components/base/TextInput'
-import styles from '@/styles/CreateOrJoinRoom.module.css'
 import ThemeToggle from '@/components/common/ThemeToggle'
+import styles from '@/styles/CreateOrJoinRoom.module.css'
+import colors from 'tailwindcss/colors'
 
 const CreateOrJoinRoom = () => {
+  const [loading, setLoading] = useState(false)
+
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="flex flex-col p-10 shadow-md rounded-md w-3/4 max-w-sm bg-white dark:bg-gray-700">
-        <div className="mx-auto mb-5 font-bold text-2xl">Video Chat App</div>
-        <ThemeToggle />
-        <Button>Create Room</Button>
-        <div className={styles.orDivider}>OR</div>
-        <TextInput className="mb-5" placeholder="Enter room code" />
-        <Button>Join Room</Button>
+      <div className="flex flex-col p-10 shadow-md rounded-md w-3/4 max-w-sm bg-white dark:bg-gray-700 relative">
+        <div className="absolute top-0 right-0">
+          <ThemeToggle />
+        </div>
+        <div className={`flex flex-col ${loading ? 'invisible' : ''} `}>
+          <div className="mx-auto mb-10 font-bold text-2xl">Video Chat App</div>
+
+          <Button>Create Room</Button>
+          <div className={styles.orDivider}>OR</div>
+          <TextInput className="mb-5" placeholder="Enter room code" />
+          <Button>Join Room</Button>
+        </div>
+        {loading && (
+          <div className="absolute flex items-center justify-center left-0 top-0 w-full h-full">
+            <PuffLoader color={colors.teal[500]} />
+          </div>
+        )}
       </div>
     </div>
   )
