@@ -4,13 +4,13 @@
 
 body {
   color-scheme: light;
-  background-color: #f0fdfa;
+  background-color: #f0fdfa !important;
   color: black;
   transition: none !important;
 }
 
 body.dark {
   color-scheme: dark;
-  background-color: #27272a;
+  background-color: #27272a !important;
   color: white;
 }

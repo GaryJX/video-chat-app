@@ -12,6 +12,8 @@ const CreateOrJoinRoom = () => {
   const toast = useToast()
 
   const handleCreateNewRoom = async () => {
+    setLoading(true)
+    return
     try {
       // TODO: Only request when the user tursn on camera and audio
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -25,7 +27,6 @@ const CreateOrJoinRoom = () => {
         position: 'bottom-left',
         description: 'Please allow microphone and camera access ',
         status: 'error',
-        duration: null,
         isClosable: true,
       })
     }
