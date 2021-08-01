@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { connect } from "mongoose";
+import { v4 as uuid } from "uuid";
 
 connect("mongodb://localhost:27017/google-docs-clone", {
   useNewUrlParser: true,
@@ -15,6 +16,7 @@ type SocketEventMap = {
   // "load-document": (documentId: string) => void;
   // "save-document": (document: object) => void;
   "create-room": () => void; // TODO
+  "created-room-id": string;
 };
 export type SocketEvent = keyof SocketEventMap;
 
@@ -26,11 +28,14 @@ const io = new Server(PORT, {
   },
 });
 
-io.on("connection", (socket: Socket<SocketEventMap>) => {
+io.on("connection", (socket: Socket<any>) => {
   console.log("Connected!");
 
   socket.on("create-room", () => {
-    // const uuid = u;
+    const newRoomID = uuid();
+    console.log({ newRoomID });
+    socket.join(newRoomID);
+    socket.emit("created-room-id", newRoomID);
   });
 
   // socket.on("get-document", async (documentId: string) => {

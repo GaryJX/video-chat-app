@@ -2,6 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
+import { SocketProvider } from 'context/SocketContext'
 import '@/styles/globals.css'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
@@ -28,7 +29,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         ))}
       </Head>
       <ChakraProvider>
-        <Component {...pageProps} />
+        <SocketProvider>
+          <Component {...pageProps} />
+        </SocketProvider>
       </ChakraProvider>
     </>
   )

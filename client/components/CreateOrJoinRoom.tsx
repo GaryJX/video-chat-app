@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { PuffLoader } from 'react-spinners'
 import Button from '@/components/base/Button'
@@ -6,23 +6,26 @@ import TextInput from '@/components/base/TextInput'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import styles from '@/styles/CreateOrJoinRoom.module.css'
 import colors from 'tailwindcss/colors'
-import { io } from 'socket.io-client'
-
-// TODO: move this to a Context file
-const socket = io('http://localhost:3001')
+import { useContext } from 'react'
+import { SocketContext } from 'context/SocketContext'
+import { useEffect } from 'react'
 
 const CreateOrJoinRoom = () => {
+  const { roomID, generateNewRoom } = useContext(SocketContext)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
 
   useEffect(() => {
-    socket.on('connection', () => {
-      console.log('@ CONNECTED')
-    })
-  }, [])
+    if (roomID) {
+      setLoading(false)
+      // TODO: Redirect to another page
+    }
+  }, [roomID])
 
   const handleCreateNewRoom = async () => {
     setLoading(true)
+    generateNewRoom()
+
     return
     try {
       // TODO: Only request when the user tursn on camera and audio
@@ -50,6 +53,7 @@ const CreateOrJoinRoom = () => {
         <div className="absolute top-px right-px z-10">
           <ThemeToggle />
         </div>
+        {roomID}
         <div className={`flex flex-col ${loading ? 'invisible' : ''} `}>
           <div className="mx-auto mb-10 font-bold text-2xl">Video Chat App</div>
           <Button onClick={handleCreateNewRoom}>Create New Room</Button>
