@@ -6,6 +6,7 @@ body {
   color-scheme: light;
   background-color: #f0fdfa;
   color: black;
+  transition: none !important;
 }
 
 body.dark {

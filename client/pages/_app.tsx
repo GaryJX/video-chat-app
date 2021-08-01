@@ -1,6 +1,7 @@
 import React from 'react'
-import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { AppProps } from 'next/app'
+import { ChakraProvider } from '@chakra-ui/react'
 import '@/styles/globals.css'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
@@ -26,7 +27,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           />
         ))}
       </Head>
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </>
   )
 }

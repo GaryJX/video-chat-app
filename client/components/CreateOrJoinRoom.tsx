@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import { PuffLoader } from 'react-spinners'
 import Button from '@/components/base/Button'
 import TextInput from '@/components/base/TextInput'
@@ -8,16 +9,39 @@ import colors from 'tailwindcss/colors'
 
 const CreateOrJoinRoom = () => {
   const [loading, setLoading] = useState(false)
+  const toast = useToast()
+
+  const handleCreateNewRoom = async () => {
+    try {
+      // TODO: Only request when the user tursn on camera and audio
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      })
+      console.log({ stream })
+    } catch (err) {
+      console.error({ err })
+      toast({
+        position: 'bottom-left',
+        description: 'Please allow microphone and camera access ',
+        status: 'error',
+        duration: null,
+        isClosable: true,
+      })
+    }
+  }
+
+  const handleJoinRoom = async () => {}
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex flex-col p-10 shadow-md rounded-md w-3/4 max-w-sm bg-white dark:bg-gray-700 relative">
-        <div className="absolute top-0 right-0 z-10">
+        <div className="absolute top-px right-px z-10">
           <ThemeToggle />
         </div>
         <div className={`flex flex-col ${loading ? 'invisible' : ''} `}>
           <div className="mx-auto mb-10 font-bold text-2xl">Video Chat App</div>
-          <Button onClick={() => setLoading(true)}>Create New Room</Button>
+          <Button onClick={handleCreateNewRoom}>Create New Room</Button>
           <div className={styles.orDivider}>OR</div>
           <TextInput className="mb-5" placeholder="Enter room code" />
           <Button>Join Room</Button>
