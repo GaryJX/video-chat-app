@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { PuffLoader } from 'react-spinners'
 import Button from '@/components/base/Button'
@@ -6,10 +6,20 @@ import TextInput from '@/components/base/TextInput'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import styles from '@/styles/CreateOrJoinRoom.module.css'
 import colors from 'tailwindcss/colors'
+import { io } from 'socket.io-client'
+
+// TODO: move this to a Context file
+const socket = io('http://localhost:3001')
 
 const CreateOrJoinRoom = () => {
   const [loading, setLoading] = useState(false)
   const toast = useToast()
+
+  useEffect(() => {
+    socket.on('connection', () => {
+      console.log('@ CONNECTED')
+    })
+  }, [])
 
   const handleCreateNewRoom = async () => {
     setLoading(true)
