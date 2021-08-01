@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/dist/client/router'
 import { useToast } from '@chakra-ui/react'
 import { PuffLoader } from 'react-spinners'
+import { FiClipboard } from 'react-icons/fi'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import Container from '@/components/base/Container'
 import Button from '@/components/base/Button'
 import TextInput from '@/components/base/TextInput'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import styles from '@/styles/CreateOrJoinRoom.module.css'
 import colors from 'tailwindcss/colors'
-import { useContext } from 'react'
-import { SocketContext } from 'context/SocketContext'
-import { useEffect } from 'react'
-import { useRouter } from 'next/dist/client/router'
-import { FiClipboard } from 'react-icons/fi'
 
 type CreateOrJoinRoomProps = {
   roomID?: string
@@ -94,16 +92,18 @@ const CreateOrJoinRoom: React.FC<CreateOrJoinRoomProps> = ({ roomID }) => {
                 disabled
                 className="w-full"
               />
-              <button
-                className="has-tooltip absolute right-px top-px p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded bg-gray-100 text-teal-600 hover:bg-gray-200"
-                aria-label="Copy to clipboard"
-                onClick={copyToClipboard}
-              >
-                <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
-                  Copy to Clipboard
-                </span>
-                <FiClipboard />
-              </button>
+              <CopyToClipboard text={roomID}>
+                <button
+                  className="has-tooltip absolute right-px top-px p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded bg-gray-100 text-teal-600 hover:bg-gray-200"
+                  aria-label="Copy to clipboard"
+                  onClick={copyToClipboard}
+                >
+                  <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
+                    Copy to Clipboard
+                  </span>
+                  <FiClipboard />
+                </button>
+              </CopyToClipboard>
             </div>
             <Button>Join Room</Button>
           </div>
