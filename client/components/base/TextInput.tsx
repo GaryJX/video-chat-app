@@ -12,7 +12,7 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   return (
     <input
-      className={`px-4 py-2 text-white border border-teal-600 bg bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded ${className}`}
+      className={`px-4 py-2 appearance-none border border-teal-600 bg-white text-gray-700 placeholder-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent ${className}`}
       {...props}
     >
       {children}
