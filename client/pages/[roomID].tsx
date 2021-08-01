@@ -1,16 +1,12 @@
-import { useRouter } from 'next/dist/client/router'
 import React from 'react'
-import { useEffect } from 'react'
+import { useRouter } from 'next/dist/client/router'
+import CreateOrJoinRoom from '@/components/CreateOrJoinRoom'
 
-const RoomPage: React.FC = (props) => {
+const RoomPage: React.FC = () => {
   const router = useRouter()
-  useEffect(() => {
-    if (router.isReady) {
-      const { roomID } = router.query
-      console.log({ roomID })
-    }
-  }, [router])
-  return <div></div>
+  const { roomID } = router.query as { roomID: string }
+
+  return router.isReady ? <CreateOrJoinRoom roomID={roomID} /> : null
 }
 
 export default RoomPage

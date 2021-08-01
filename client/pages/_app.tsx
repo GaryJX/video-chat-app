@@ -30,7 +30,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       </Head>
       <ChakraProvider>
         <SocketProvider>
-          <Component {...pageProps} />
+          <main>
+            <Component {...pageProps} />
+          </main>
         </SocketProvider>
       </ChakraProvider>
     </>

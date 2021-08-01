@@ -45,8 +45,11 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
+      className="has-tooltip p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
     >
+      <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
+        Toggle to {theme === 'light' ? 'Dark' : 'Light'} Theme
+      </span>
       {theme === 'light' ? <FiMoon /> : <FiSun />}
     </button>
   )

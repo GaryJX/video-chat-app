@@ -1,11 +1,7 @@
 import CreateOrJoinRoom from '@/components/CreateOrJoinRoom'
 
 export const Home: React.FC = () => {
-  return (
-    <main>
-      <CreateOrJoinRoom />
-    </main>
-  )
+  return <CreateOrJoinRoom />
 }
 
 export default Home
