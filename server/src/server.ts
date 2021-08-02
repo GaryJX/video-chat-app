@@ -28,14 +28,17 @@ const io = new Server(PORT, {
   },
 });
 
-io.on("connection", (socket: Socket<any>) => {
-  console.log("Connected!");
+io.on("connection", (socket: Socket) => {
+  const userID = socket.id;
+  socket.on("join-room", ({ roomID, name, signal }) => {
+    socket.join(roomID);
+    socket.broadcast
+      .to(roomID)
+      .emit("user-connected", { name, signal, userID });
 
-  socket.on("create-room", () => {
-    const newRoomID = uuid();
-    console.log({ newRoomID });
-    socket.join(newRoomID);
-    socket.emit("created-room-id", newRoomID);
+    socket.on("disconnect", () => {
+      socket.broadcast.to(roomID).emit("user-disconnected", userID);
+    });
   });
 
   // socket.on("get-document", async (documentId: string) => {

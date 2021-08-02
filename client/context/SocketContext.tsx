@@ -6,44 +6,83 @@ import React, {
   useMemo,
 } from 'react'
 import { io } from 'socket.io-client'
+import Peer from 'simple-peer'
+import { useRouter } from 'next/dist/client/router'
 
 // TODO: Use an environment variable for API URL
 const socket = io('http://localhost:3001')
 
 type SocketContextType = {
-  roomID: string | null
-  generateNewRoom: () => void
+  userStream: MediaStream | null
+  otherStream: MediaStream | null
+  setUserStream: (stream: MediaStream | null) => void
+  setRoomID: (roomID: string) => void
+  setName: (name: string) => void
 }
 
 const SocketContext = createContext<SocketContextType>({
-  roomID: null,
-  generateNewRoom: () => {},
+  userStream: null,
+  otherStream: null,
+  setUserStream: () => {},
+  setRoomID: () => {},
+  setName: () => {},
 })
 
 const SocketProvider: React.FC = ({ children }) => {
-  const [roomID, setRoomID] = useState<string | null>(null)
+  const [userStream, setUserStream] = useState<MediaStream | null>(null)
+  const [roomID, setRoomID] = useState('')
+  const [name, setName] = useState('Gary (TODO)') // TODO: Handle this logic properly
+  const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
+  const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
+
+  const peer: Peer.Instance | null = useMemo(() => {
+    if (userStream) {
+      return new Peer({
+        initiator: true,
+        trickle: false,
+        stream: userStream,
+      })
+    } else {
+      return null
+    }
+  }, [userStream])
+
   const memoizedValue = useMemo<SocketContextType>(() => {
     return {
-      roomID,
-      generateNewRoom,
+      userStream,
+      otherStream,
+      setUserStream,
+      setRoomID,
+      setName,
     }
-  }, [roomID])
+  }, [userStream, otherStream, setUserStream, setRoomID, setName])
 
   useEffect(() => {
-    socket.on('created-room-id', (roomID) => {
-      setRoomID(roomID)
-    })
-  }, [])
+    if (userStream && roomID && name && peer) {
+      peer.on('signal', (signal) => {
+        console.log('@@@ SIGNAL PEER REACHED')
+        console.log(signal)
+        socket.emit('join-room', { roomID, name, signal })
+        // socket.emit("")
+      })
+
+      peer.on('stream', (currentStream) => {
+        console.log('@@@ STREAM PEER REACHED')
+        setOtherStream(currentStream)
+      })
+
+      socket.on('user-connected', ({ name, signal }) => {
+        console.log('@@@ USER CONNECTED')
+        peer.signal(signal)
+      })
+    }
+  }, [userStream, roomID, name, peer])
 
   return (
     <SocketContext.Provider value={memoizedValue}>
       {children}
     </SocketContext.Provider>
   )
-}
-
-const generateNewRoom = () => {
-  socket.emit('create-room')
 }
 
 export { SocketProvider, SocketContext }
