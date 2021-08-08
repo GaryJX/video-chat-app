@@ -45,7 +45,7 @@ const SocketProvider: React.FC = ({ children }) => {
   const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
   // const [isInitiator, setIsInitiator] = useState(false)
-  const isInitiator = useRef(true)
+  const isInitiator = useRef(false)
 
   // const peer: Peer.Instance | null = useMemo(() => {
   //   if (process.browser) {
@@ -97,7 +97,7 @@ const SocketProvider: React.FC = ({ children }) => {
 
       socket.on('is-initiator', () => {
         console.log('@ I AM INITIATOR')
-        isInitiator.current = false
+        isInitiator.current = true
       })
 
       socket.on('user-connected', ({ name, userID }) => {
