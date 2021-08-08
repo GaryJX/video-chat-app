@@ -15,6 +15,7 @@ const socket = io('http://localhost:3001')
 type SocketContextType = {
   userStream: MediaStream | null
   otherStream: MediaStream | null
+  name: string
   setUserStream: (stream: MediaStream | null) => void
   setRoomID: (roomID: string) => void
   setName: (name: string) => void
@@ -23,6 +24,7 @@ type SocketContextType = {
 const SocketContext = createContext<SocketContextType>({
   userStream: null,
   otherStream: null,
+  name: '',
   setUserStream: () => {},
   setRoomID: () => {},
   setName: () => {},
@@ -31,7 +33,7 @@ const SocketContext = createContext<SocketContextType>({
 const SocketProvider: React.FC = ({ children }) => {
   const [userStream, setUserStream] = useState<MediaStream | null>(null)
   const [roomID, setRoomID] = useState('')
-  const [name, setName] = useState('Gary (TODO)') // TODO: Handle this logic properly
+  const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
 
@@ -51,11 +53,12 @@ const SocketProvider: React.FC = ({ children }) => {
     return {
       userStream,
       otherStream,
+      name,
       setUserStream,
       setRoomID,
       setName,
     }
-  }, [userStream, otherStream, setUserStream, setRoomID, setName])
+  }, [userStream, otherStream, name, setUserStream, setRoomID, setName])
 
   useEffect(() => {
     if (userStream && roomID && name && peer) {

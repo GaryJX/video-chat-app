@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { useToast } from '@chakra-ui/react'
 import { FiClipboard } from 'react-icons/fi'
@@ -9,28 +9,44 @@ import Button from '@/components/base/Button'
 import TextInput from '@/components/base/TextInput'
 import ThemeToggle from '@/components/common/ThemeToggle'
 import styles from '@/styles/CreateOrJoinRoom.module.css'
+import { SocketContext } from 'context/SocketContext'
 
 type CreateOrJoinRoomProps = {
   roomID?: string
 }
 
 const CreateOrJoinRoom: React.FC<CreateOrJoinRoomProps> = ({ roomID }) => {
-  const [input, setInput] = useState('')
+  const [roomIDInput, setRoomIDInput] = useState('')
+  const [nameInput, setNameInput] = useState('')
+  const { setName } = useContext(SocketContext)
   const router = useRouter()
   const toast = useToast()
 
   const createNewRoom = () => {
     const newRoomID = uuid().slice(0, 7).toUpperCase()
-    router.push(`/${newRoomID}`)
+    router.push(`/room/${newRoomID}`)
   }
 
-  const joinRoom = () => {
-    if (input) {
-      router.push(`/room/${input}`)
+  const joinRoomFromHome = () => {
+    if (roomIDInput && nameInput) {
+      setName(nameInput)
+      router.push(`/room/${roomIDInput}`)
     } else {
       toast({
         position: 'bottom-left',
-        description: 'Please enter a Room ID.',
+        description: 'Please enter a Room ID and User Name.',
+        status: 'error',
+      })
+    }
+  }
+
+  const joinRoomFromRoomPage = () => {
+    if (nameInput) {
+      setName(nameInput)
+    } else {
+      toast({
+        position: 'bottom-left',
+        description: 'Please enter a User Name.',
         status: 'error',
       })
     }
@@ -57,13 +73,29 @@ const CreateOrJoinRoom: React.FC<CreateOrJoinRoomProps> = ({ roomID }) => {
             <>
               <Button onClick={createNewRoom}>Create New Room</Button>
               <div className={styles.orDivider}>OR</div>
+              <label htmlFor="user-name" className="font-bold mb-2">
+                Room ID
+              </label>
               <TextInput
                 className="mb-5"
-                placeholder="Enter Room ID"
-                value={input}
-                onChange={(e) => setInput((e.target as any).value)}
+                value={roomIDInput}
+                onChange={(e) =>
+                  setRoomIDInput((e.target as HTMLInputElement).value)
+                }
               />
-              <Button onClick={joinRoom}>Join Room</Button>
+              <label htmlFor="user-name" className="font-bold mb-2">
+                User Name
+              </label>
+              <TextInput
+                id="user-name"
+                name="user-name"
+                value={nameInput}
+                onChange={(e) =>
+                  setNameInput((e.target as HTMLInputElement).value)
+                }
+                className="mb-5"
+              />
+              <Button onClick={joinRoomFromHome}>Join Room</Button>
             </>
           )}
           {roomID && (
@@ -74,13 +106,14 @@ const CreateOrJoinRoom: React.FC<CreateOrJoinRoomProps> = ({ roomID }) => {
               <div className="relative mb-5">
                 <TextInput
                   id="room-id"
+                  name="room-id"
                   value={roomID}
                   disabled
-                  className="w-full"
+                  className="w-full bg-gray-100"
                 />
                 <CopyToClipboard text={roomID}>
                   <button
-                    className="has-tooltip absolute right-px top-px p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded bg-gray-100 text-teal-600 hover:bg-gray-200"
+                    className="has-tooltip absolute right-px top-px p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded bg-gray-200 text-teal-600 hover:bg-gray-300"
                     aria-label="Copy to clipboard"
                     onClick={copyToClipboard}
                   >
@@ -91,9 +124,19 @@ const CreateOrJoinRoom: React.FC<CreateOrJoinRoomProps> = ({ roomID }) => {
                   </button>
                 </CopyToClipboard>
               </div>
-              <Button onClick={() => router.push(`/room/${roomID}`)}>
-                Join Room
-              </Button>
+              <label htmlFor="user-name" className="font-bold mb-2">
+                User Name
+              </label>
+              <TextInput
+                id="user-name"
+                name="user-name"
+                value={nameInput}
+                onChange={(e) =>
+                  setNameInput((e.target as HTMLInputElement).value)
+                }
+                className="w-full mb-5"
+              />
+              <Button onClick={joinRoomFromRoomPage}>Join Room</Button>
             </>
           )}
         </div>

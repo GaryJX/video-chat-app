@@ -21,6 +21,7 @@ type SocketEventMap = {
 export type SocketEvent = keyof SocketEventMap;
 
 const PORT = Number(process.env.PORT) || 3001;
+console.log(`Starting socket.io server on port ${PORT}`);
 const io = new Server(PORT, {
   cors: {
     origin: "http://localhost:3000",
