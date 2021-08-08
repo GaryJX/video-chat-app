@@ -43,17 +43,26 @@ const SocketProvider: React.FC = ({ children }) => {
   const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
 
-  const peer: Peer.Instance | null = useMemo(() => {
-    if (process.browser) {
-      return new Peer({
-        initiator: true,
-        trickle: false,
-        stream: userStream || undefined,
-      })
-    } else {
-      return null
-    }
-  }, [])
+  // const peer: Peer.Instance | null = useMemo(() => {
+  //   if (process.browser) {
+  //     return new Peer({
+  //       initiator: true,
+  //       trickle: false,
+  //       stream: userStream || undefined,
+  //     })
+  //   } else {
+  //     return null
+  //   }
+  // }, [])
+  const peerRef = useRef<Peer.Instance>()
+
+  useEffect(() => {
+    peerRef.current = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: userStream || undefined,
+    })
+  }, [userStream])
 
   const memoizedValue = useMemo<SocketContextType>(() => {
     return {
@@ -94,17 +103,17 @@ const SocketProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (roomID && name) {
-      const peer = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: userStream || undefined,
-      })
+      // const peer = new Peer({
+      //   initiator: true,
+      //   trickle: false,
+      //   stream: userStream || undefined,
+      // })
 
       socket.on('peer-signal', (signal) => {
         console.log('@ Peer Signal REACHED')
         console.log({ signal })
         if (signal) {
-          peer.signal(signal)
+          peerRef.current?.signal(signal)
         } else {
           setOtherStream(null)
         }
@@ -114,12 +123,12 @@ const SocketProvider: React.FC = ({ children }) => {
         socket.emit('peer-signal', null)
       }
 
-      peer.on('signal', (signal) => {
+      peerRef.current?.on('signal', (signal) => {
         console.log('@@ SIGNAL PEER REACHED')
         socket.emit('peer-signal', signal)
       })
 
-      peer.on('stream', (stream) => {
+      peerRef.current?.on('stream', (stream) => {
         console.log('@@@ STREAM PEER REACHED')
         setOtherStream(stream)
       })
