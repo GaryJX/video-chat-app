@@ -11,7 +11,7 @@ import { useRouter } from 'next/dist/client/router'
 
 // TODO: Use an environment variable for API URL
 // const socket = io('https://video-chat-app-api.herokuapp.com/')
-const socket = io('localhost:3001')
+const socket = io('http://localhost:3001')
 
 type SocketContextType = {
   userStream: MediaStream | null
