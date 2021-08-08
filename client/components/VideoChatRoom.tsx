@@ -16,8 +16,8 @@ const VideoChatRoom: React.FC = () => {
     setOtherUserJoined,
   } = useContext(SocketContext)
   const [loading, setLoading] = useState(false)
-  const [videoOn, setVideoOn] = useState(true)
-  const [audioOn, setAudioOn] = useState(true)
+  const [videoOn, setVideoOn] = useState(false)
+  const [audioOn, setAudioOn] = useState(false)
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null)
   const [otherVideoRef, setOtherVideoRef] = useState<HTMLVideoElement | null>(
     null

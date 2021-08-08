@@ -114,8 +114,7 @@ const SocketProvider: React.FC = ({ children }) => {
     if (roomID && name) {
       console.log({ isInitiator, userStream })
       const peer = new Peer({
-        // initiator: isInitiator,
-        initiator: true,
+        initiator: isInitiator,
         trickle: false,
         stream: userStream || undefined,
       })
