@@ -22,7 +22,7 @@ type SocketContextType = {
   setRoomID: (roomID: string) => void
   setName: (name: string) => void
   setOtherUserJoined: (otherUserJoined: boolean) => void
-  joinCall: () => void
+  // joinCall: () => void
 }
 
 const SocketContext = createContext<SocketContextType>({
@@ -34,7 +34,7 @@ const SocketContext = createContext<SocketContextType>({
   setRoomID: () => {},
   setOtherUserJoined: () => {},
   setName: () => {},
-  joinCall: () => {},
+  // joinCall: () => {},
 })
 
 const SocketProvider: React.FC = ({ children }) => {
