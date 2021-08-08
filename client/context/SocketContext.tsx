@@ -112,6 +112,7 @@ const SocketProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (roomID && name) {
+      console.log({ isInitiator })
       const peer = new Peer({
         initiator: isInitiator,
         trickle: false,
