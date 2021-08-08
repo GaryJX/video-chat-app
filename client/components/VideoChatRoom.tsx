@@ -4,6 +4,7 @@ import { PuffLoader } from 'react-spinners'
 import { SocketContext } from 'context/SocketContext'
 import colors from 'tailwindcss/colors'
 import { useRouter } from 'next/dist/client/router'
+import VideoChatToolbar from '@/components/VideoChatToolbar'
 
 const VideoChatRoom: React.FC = () => {
   const { userStream, otherStream, setUserStream, setRoomID } =
@@ -57,20 +58,19 @@ const VideoChatRoom: React.FC = () => {
     }
   }
 
+  console.log({ otherStream })
+
   return loading ? (
     <div className="flex items-center justify-center h-screen">
       <PuffLoader color={colors.teal[500]} size={100} />
     </div>
   ) : (
-    <div className="h-screen p-10">
-      <video playsInline muted ref={setVideoRef} autoPlay className="w-50" />
-      <video
-        playsInline
-        muted
-        ref={setOtherVideoRef}
-        autoPlay
-        className="w-50"
-      />
+    <div className="h-screen flex flex-row flex-wrap items-center justify-center p-10 pb-16">
+      <video playsInline muted ref={setVideoRef} autoPlay className="w-1/2" />
+      {otherStream && (
+        <video playsInline ref={setOtherVideoRef} autoPlay className="w-1/2" />
+      )}
+      <VideoChatToolbar roomID={roomID} />
     </div>
   )
 }

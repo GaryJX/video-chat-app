@@ -3,7 +3,11 @@ import { FiMoon, FiSun } from 'react-icons/fi'
 
 const LOCAL_STORAGE_THEME_KEY = 'theme'
 
-const ThemeToggle = () => {
+type ThemeToggleProps = {
+  align?: 'center' | 'right'
+}
+
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ align = 'center' }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
   useLayoutEffect(() => {
@@ -47,7 +51,15 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       className="has-tooltip p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
     >
-      <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
+      <span
+        className={`tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9`}
+        style={{
+          transform:
+            align === 'center'
+              ? 'translateX(-50%)'
+              : 'translateX(calc(-100% + 1.25rem))',
+        }}
+      >
         Toggle to {theme === 'light' ? 'Dark' : 'Light'} Theme
       </span>
       {theme === 'light' ? <FiMoon /> : <FiSun />}
