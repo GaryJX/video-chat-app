@@ -92,12 +92,13 @@ const SocketProvider: React.FC = ({ children }) => {
   ])
 
   useEffect(() => {
-    if (roomID && name) {
+    if (roomID && name && userStream) {
       socket.emit('join-room', { roomID, name })
 
-      socket.on('is-initiator', () => {
+      socket.on('is-initiator', (initiator: boolean) => {
         console.log('@ I AM INITIATOR')
-        isInitiator.current = true
+        isInitiator.current = initiator
+        joinPeer()
       })
 
       socket.on('user-connected', ({ name, userID }) => {
@@ -109,53 +110,52 @@ const SocketProvider: React.FC = ({ children }) => {
         setOtherUserJoined(false)
       })
     }
-  }, [roomID, name])
-
-  useEffect(() => {
-    if (roomID && name) {
-      console.log({ isInitiator, userStream })
-      const peer = new Peer({
-        initiator: isInitiator.current,
-        trickle: false,
-        stream: userStream || undefined,
-      })
-      // const peer = new Peer({
-      //   initiator: true,
-      //   trickle: false,
-      //   stream: userStream || undefined,
-      // })
-
-      socket.on('peer-signal', (signal) => {
-        console.log('@ Peer Signal REACHED')
-        console.log({ signal })
-        if (signal) {
-          peer.signal(signal)
-        } else {
-          setOtherStream(null)
-        }
-      })
-
-      if (!userStream) {
-        socket.emit('peer-signal', null)
-      }
-
-      peer.on('signal', (signal) => {
-        console.log('@@ SIGNAL PEER REACHED')
-        socket.emit('peer-signal', signal)
-      })
-
-      peer.on('stream', (stream) => {
-        console.log('@@@ STREAM PEER REACHED')
-        setOtherStream(stream)
-      })
-
-      peerRef.current = peer
-
-      return () => {
-        console.log('@ Destroying peer')
-      }
-    }
   }, [roomID, name, userStream])
+
+  const joinPeer = () => {
+    console.log({ isInitiator: isInitiator.current, userStream })
+
+    const peer = new Peer({
+      initiator: isInitiator.current,
+      trickle: false,
+      stream: userStream || undefined,
+    })
+
+    socket.on('peer-signal', (signal) => {
+      console.log('@ Peer Signal REACHED')
+      console.log({ signal })
+      if (signal) {
+        peer.signal(signal)
+      } else {
+        setOtherStream(null)
+      }
+    })
+
+    if (!userStream) {
+      socket.emit('peer-signal', null)
+    }
+
+    peer.on('signal', (signal) => {
+      console.log('@@ SIGNAL PEER REACHED')
+      socket.emit('peer-signal', signal)
+    })
+
+    peer.on('stream', (stream) => {
+      console.log('@@@ STREAM PEER REACHED')
+      setOtherStream(stream)
+    })
+
+    peerRef.current = peer
+  }
+
+  // useEffect(() => {
+  //   if (roomID && name) {
+
+  //     return () => {
+  //       console.log('@ Destroying peer')
+  //     }
+  //   }
+  // }, [roomID, name, userStream])
 
   // const joinCall = () => {
   //   const peer = new Peer({ initiator: false, trickle: false, stream });

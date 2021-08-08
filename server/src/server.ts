@@ -53,8 +53,9 @@ io.on("connection", (socket: Socket) => {
       // TODO: Currently only handling max 2 users in a room. Eventually allow more users
       const alreadyJoinedUser = roomConnections[roomID][0];
       socket.emit("user-connected", alreadyJoinedUser);
+      socket.emit("is-initiator", false);
     } else {
-      socket.emit("is-initiator");
+      socket.emit("is-initiator", true);
     }
 
     roomConnections[roomID].push({ name, userID });
