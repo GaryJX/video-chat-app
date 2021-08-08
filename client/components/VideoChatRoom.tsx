@@ -9,7 +9,9 @@ import VideoChatToolbar from '@/components/VideoChatToolbar'
 const VideoChatRoom: React.FC = () => {
   const { userStream, otherStream, setUserStream, setRoomID } =
     useContext(SocketContext)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [videoOn, setVideoOn] = useState(false)
+  const [audioOn, setAudioOn] = useState(false)
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null)
   const [otherVideoRef, setOtherVideoRef] = useState<HTMLVideoElement | null>(
     null
@@ -19,20 +21,10 @@ const VideoChatRoom: React.FC = () => {
   const { roomID } = router.query as { roomID: string }
 
   useEffect(() => {
-    getVideoAndAudioPermissions()
-  }, [])
-
-  useEffect(() => {
     if (router.isReady) {
       setRoomID(roomID)
     }
   }, [router])
-
-  useEffect(() => {
-    if (videoRef && userStream) {
-      videoRef.srcObject = userStream
-    }
-  }, [videoRef, userStream])
 
   useEffect(() => {
     if (otherVideoRef && otherStream) {
@@ -40,25 +32,36 @@ const VideoChatRoom: React.FC = () => {
     }
   }, [otherVideoRef, otherStream])
 
-  const getVideoAndAudioPermissions = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      })
-      setUserStream(stream)
-      setLoading(false)
-    } catch (err) {
-      toast({
-        position: 'bottom-left',
-        description: 'Please grant microphone and camera access',
-        status: 'error',
-        isClosable: true,
-      })
+  useEffect(() => {
+    updateVideoAndAudioPermissions()
+  }, [audioOn, videoOn])
+
+  const updateVideoAndAudioPermissions = async () => {
+    if (userStream) {
+      userStream.getTracks().forEach((track) => track.stop())
+    }
+
+    if (audioOn || videoOn) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: videoOn,
+          audio: audioOn,
+        })
+
+        videoRef!.srcObject = stream
+        setUserStream(stream)
+        setLoading(false)
+      } catch (err) {
+        console.error(err)
+        toast({
+          position: 'bottom-left',
+          description: 'Please grant microphone and camera access',
+          status: 'error',
+          isClosable: true,
+        })
+      }
     }
   }
-
-  console.log({ otherStream })
 
   return loading ? (
     <div className="flex items-center justify-center h-screen">
@@ -70,7 +73,13 @@ const VideoChatRoom: React.FC = () => {
       {otherStream && (
         <video playsInline ref={setOtherVideoRef} autoPlay className="w-1/2" />
       )}
-      <VideoChatToolbar roomID={roomID} />
+      <VideoChatToolbar
+        roomID={roomID}
+        videoOn={videoOn}
+        audioOn={audioOn}
+        onToggleVideo={() => setVideoOn((on) => !on)}
+        onToggleAudio={() => setAudioOn((on) => !on)}
+      />
     </div>
   )
 }

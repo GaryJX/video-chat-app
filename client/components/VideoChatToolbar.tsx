@@ -10,12 +10,27 @@ import {
   FaVideo,
   FaVideoSlash,
 } from 'react-icons/fa'
+import { useRouter } from 'next/dist/client/router'
+import { useContext } from 'react'
+import { SocketContext } from 'context/SocketContext'
 
 type VideoChatToolbarProps = {
   roomID: string
+  videoOn: boolean
+  audioOn: boolean
+  onToggleVideo: () => void
+  onToggleAudio: () => void
 }
 
-const VideoChatToolbar: React.FC<VideoChatToolbarProps> = ({ roomID }) => {
+const VideoChatToolbar: React.FC<VideoChatToolbarProps> = ({
+  roomID,
+  videoOn,
+  audioOn,
+  onToggleVideo,
+  onToggleAudio,
+}) => {
+  const { userStream, setUserStream } = useContext(SocketContext)
+  const router = useRouter()
   const toast = useToast()
 
   const copyToClipboard = () => {
@@ -25,6 +40,12 @@ const VideoChatToolbar: React.FC<VideoChatToolbarProps> = ({ roomID }) => {
       status: 'success',
       duration: 1000,
     })
+  }
+
+  const confirmLeaveRoom = () => {
+    if (window.confirm('Are you sure you want to leave the room?')) {
+      router.push('/')
+    }
   }
 
   return (
@@ -47,30 +68,28 @@ const VideoChatToolbar: React.FC<VideoChatToolbarProps> = ({ roomID }) => {
       <div className="flex justify-center gap-3">
         <button
           className="has-tooltip p-3 ml-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded text-red-500 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-          aria-label="Mute/Unmute"
-          // onClick={copyToClipboard}
+          aria-label={audioOn ? 'Mute' : 'Unmute'}
+          onClick={onToggleAudio}
         >
           <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
-            Mute/Unmute
+            {audioOn ? 'Mute' : 'Unmute'}
           </span>
-          {/* <FaMicrophone /> */}
-          <FaMicrophoneSlash />
+          {audioOn ? <FaMicrophone /> : <FaMicrophoneSlash />}
         </button>
         <button
           className="has-tooltip p-3 ml-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded text-red-500 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
-          aria-label="Start/Stop Video"
-          // onClick={copyToClipboard}
+          aria-label={videoOn ? 'Stop Video' : 'Start Video'}
+          onClick={onToggleVideo}
         >
           <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
-            Start/Stop Video
+            {videoOn ? 'Stop Video' : 'Start Video'}
           </span>
-          <FaVideoSlash />
-          {/* <FaVideo /> */}
+          {videoOn ? <FaVideo /> : <FaVideoSlash />}
         </button>
         <button
           className="has-tooltip p-3 ml-1 focus:outline-none focus:ring-2 focus:ring-red-500 rounded text-red-500 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
           aria-label="Leave Room"
-          // onClick={copyToClipboard}
+          onClick={confirmLeaveRoom} // TODO: Handle emiting event to server and stopping video
         >
           <span className="tooltip rounded shadow-lg px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-black whitespace-nowrap -top-9 transform -translate-x-1/2">
             Leave Room
