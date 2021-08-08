@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { Request, Response } from "express";
 import { connect } from "mongoose";
 import { v4 as uuid } from "uuid";
 
@@ -20,15 +21,27 @@ type SocketEventMap = {
 };
 export type SocketEvent = keyof SocketEventMap;
 
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+const server = require("http").createServer(app);
+
+app.use(cors());
+app.get("/", (req: Request, res: Response) => {
+  res.send("Server is running");
+});
+
 const PORT = Number(process.env.PORT) || 3001;
-console.log(`Starting socket.io server on port ${PORT}`);
 // TODO: Change this to an environment variable
-const io = new Server(PORT, {
+const io = new Server(server, {
   cors: {
-    origin: "https://garyjx-video-chat-app.vercel.app",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
+
+server.listen(PORT, () => `Server is listening on port ${PORT}`);
 
 io.on("connection", (socket: Socket) => {
   const userID = socket.id;
@@ -42,18 +55,4 @@ io.on("connection", (socket: Socket) => {
       socket.broadcast.to(roomID).emit("user-disconnected", userID);
     });
   });
-
-  // socket.on("get-document", async (documentId: string) => {
-  //   const document = await findOrCreateDocument(documentId);
-  //   socket.join(documentId);
-  //   socket.emit("load-document", document.data);
-
-  //   socket.on("send-changes", (delta) => {
-  //     socket.broadcast.to(documentId).emit("receive-changes", delta);
-  //   });
-
-  //   socket.on("save-document", async (data) => {
-  //     // await Document.findByIdAndUpdate(documentId, { data });
-  //   });
-  // });
 });
