@@ -10,8 +10,8 @@ import Peer from 'simple-peer'
 import { useRouter } from 'next/dist/client/router'
 
 // TODO: Use an environment variable for API URL
-const socket = io('https://video-chat-app-api.herokuapp.com/')
-// const socket = io('localhost:3001')
+// const socket = io('https://video-chat-app-api.herokuapp.com/')
+const socket = io('localhost:3001')
 
 type SocketContextType = {
   userStream: MediaStream | null
@@ -44,6 +44,7 @@ const SocketProvider: React.FC = ({ children }) => {
   const [roomID, setRoomID] = useState('')
   const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
+  const [isInitiator, setIsInitiator] = useState(false)
 
   // const peer: Peer.Instance | null = useMemo(() => {
   //   if (process.browser) {
@@ -92,6 +93,11 @@ const SocketProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (roomID && name) {
       socket.emit('join-room', { roomID, name })
+
+      socket.on('is-initiator', () => {
+        console.log('@ I AM INITIATOR')
+        setIsInitiator(true)
+      })
 
       socket.on('user-connected', ({ name, userID }) => {
         console.log('@ Other User Joined', { name, userID })
