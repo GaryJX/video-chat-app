@@ -8,6 +8,8 @@ import VideoChatToolbar from '@/components/VideoChatToolbar'
 
 const VideoChatRoom: React.FC = () => {
   const {
+    name,
+    otherUserName,
     userStream,
     otherStream,
     setUserStream,
@@ -92,7 +94,8 @@ const VideoChatRoom: React.FC = () => {
           style={{ zIndex: -1 }}
         >
           <div className="bg-gray-200 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
-            GX
+            {name.split(' ')[0][0]?.toUpperCase()}
+            {name.split(' ')[1]?.[0]?.toUpperCase()}
           </div>
         </div>
         <video
@@ -103,7 +106,7 @@ const VideoChatRoom: React.FC = () => {
           className="w-full"
         />
         <div className="absolute bottom-0 text-black bg-gray-200 dark:bg-gray-700 dark:text-white w-full px-3 py-1">
-          Gary Xie
+          {name}
         </div>
       </div>
       {otherUserJoined && (
@@ -116,7 +119,8 @@ const VideoChatRoom: React.FC = () => {
             style={{ zIndex: -1 }}
           >
             <div className="bg-gray-200 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
-              GX
+              {otherUserName.split(' ')[0][0]?.toUpperCase()}
+              {otherUserName.split(' ')[1]?.[0]?.toUpperCase()}
             </div>
           </div>
           <video
@@ -126,7 +130,7 @@ const VideoChatRoom: React.FC = () => {
             className="w-full"
           />
           <div className="absolute bottom-0 text-black bg-gray-200 dark:bg-gray-700 dark:text-white w-full px-3 py-1">
-            Gary Xie
+            {otherUserName}
           </div>
         </div>
       )}

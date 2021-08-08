@@ -17,6 +17,7 @@ type SocketContextType = {
   userStream: MediaStream | null
   otherStream: MediaStream | null
   otherUserJoined: boolean
+  otherUserName: string
   name: string
   setUserStream: (stream: MediaStream | null) => void
   setRoomID: (roomID: string) => void
@@ -29,6 +30,7 @@ const SocketContext = createContext<SocketContextType>({
   userStream: null,
   otherStream: null,
   otherUserJoined: false,
+  otherUserName: '',
   name: '',
   setUserStream: () => {},
   setRoomID: () => {},
@@ -41,6 +43,7 @@ const SocketProvider: React.FC = ({ children }) => {
   const [userStream, setUserStream] = useState<MediaStream | null>(null)
   const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
   const [otherUserJoined, setOtherUserJoined] = useState(false)
+  const [otherUserName, setOtherUserName] = useState('')
   const [roomID, setRoomID] = useState('')
   const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
@@ -73,10 +76,12 @@ const SocketProvider: React.FC = ({ children }) => {
       userStream,
       otherStream,
       otherUserJoined,
+      otherUserName,
       name,
       setUserStream,
       setRoomID,
       setOtherUserJoined,
+      setOtherUserName,
       setName,
       // joinCall,
     }
@@ -84,10 +89,12 @@ const SocketProvider: React.FC = ({ children }) => {
     userStream,
     otherStream,
     otherUserJoined,
+    otherUserName,
     name,
     setUserStream,
     setRoomID,
     setOtherUserJoined,
+    setOtherUserName,
     setName,
   ])
 
@@ -104,6 +111,7 @@ const SocketProvider: React.FC = ({ children }) => {
       socket.on('user-connected', ({ name, userID }) => {
         console.log('@ Other User Joined', { name, userID })
         setOtherUserJoined(true)
+        setOtherUserName(name)
       })
 
       socket.on('user-disconnected', (userID) => {
