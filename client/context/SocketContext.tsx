@@ -22,6 +22,7 @@ type SocketContextType = {
   setRoomID: (roomID: string) => void
   setName: (name: string) => void
   setOtherUserJoined: (otherUserJoined: boolean) => void
+  joinCall: () => void
 }
 
 const SocketContext = createContext<SocketContextType>({
@@ -33,6 +34,7 @@ const SocketContext = createContext<SocketContextType>({
   setRoomID: () => {},
   setOtherUserJoined: () => {},
   setName: () => {},
+  joinCall: () => {},
 })
 
 const SocketProvider: React.FC = ({ children }) => {
@@ -74,6 +76,7 @@ const SocketProvider: React.FC = ({ children }) => {
       setRoomID,
       setOtherUserJoined,
       setName,
+      // joinCall,
     }
   }, [
     userStream,
@@ -103,8 +106,8 @@ const SocketProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (roomID && name) {
-      peerRef.current = new Peer({
-        initiator: true,
+      const peer = new Peer({
+        initiator: false,
         trickle: false,
         stream: userStream || undefined,
       })
@@ -118,7 +121,7 @@ const SocketProvider: React.FC = ({ children }) => {
         console.log('@ Peer Signal REACHED')
         console.log({ signal })
         if (signal) {
-          peerRef.current?.signal(signal)
+          peer.signal(signal)
         } else {
           setOtherStream(null)
         }
@@ -128,21 +131,39 @@ const SocketProvider: React.FC = ({ children }) => {
         socket.emit('peer-signal', null)
       }
 
-      peerRef.current?.on('signal', (signal) => {
+      peer.on('signal', (signal) => {
         console.log('@@ SIGNAL PEER REACHED')
         socket.emit('peer-signal', signal)
       })
 
-      peerRef.current?.on('stream', (stream) => {
+      peer.on('stream', (stream) => {
         console.log('@@@ STREAM PEER REACHED')
         setOtherStream(stream)
       })
+
+      peerRef.current = peer
 
       return () => {
         console.log('@ Destroying peer')
       }
     }
   }, [roomID, name, userStream])
+
+  // const joinCall = () => {
+  //   const peer = new Peer({ initiator: false, trickle: false, stream });
+
+  //   peer.on("signal", (data) => {
+  //     socket.emit("answercall", { signal: data, to: call.from });
+  //   });
+
+  //   peer.on("stream", (currentStream) => {
+  //     userVideo.current.srcObject = currentStream;
+  //   });
+
+  //   peer.signal(call.signal);
+
+  //   connectionRef.current = peer;
+  // }
 
   // useEffect(() => {
   //   if (roomID && name && peer) {
