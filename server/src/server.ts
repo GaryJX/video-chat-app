@@ -25,7 +25,7 @@ console.log(`Starting socket.io server on port ${PORT}`);
 // TODO: Change this to an environment variable
 const io = new Server(PORT, {
   cors: {
-    origin: "https://garyjx-video-chat-app.vercel.app/",
+    origin: "https://garyjx-video-chat-app.vercel.app",
     methods: ["GET", "POST"],
   },
 });
