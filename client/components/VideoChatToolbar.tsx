@@ -29,7 +29,6 @@ const VideoChatToolbar: React.FC<VideoChatToolbarProps> = ({
   onToggleVideo,
   onToggleAudio,
 }) => {
-  const { userStream, setUserStream } = useContext(SocketContext)
   const router = useRouter()
   const toast = useToast()
 
