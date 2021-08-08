@@ -39,15 +39,11 @@ const SocketProvider: React.FC = ({ children }) => {
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
 
   const peer: Peer.Instance | null = useMemo(() => {
-    if (userStream) {
-      return new Peer({
-        initiator: true,
-        trickle: false,
-        stream: userStream,
-      })
-    } else {
-      return null
-    }
+    return new Peer({
+      initiator: true,
+      trickle: false,
+      stream: userStream || undefined,
+    })
   }, [userStream])
 
   const memoizedValue = useMemo<SocketContextType>(() => {
