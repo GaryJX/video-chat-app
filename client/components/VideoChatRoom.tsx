@@ -40,8 +40,8 @@ const VideoChatRoom: React.FC = () => {
   }, [otherVideoRef, otherStream])
 
   useEffect(() => {
-    updateVideoAndAudioPermissions()
-  }, [audioOn, videoOn])
+    if (videoRef) updateVideoAndAudioPermissions()
+  }, [audioOn, videoOn, videoRef])
 
   const updateVideoAndAudioPermissions = async () => {
     if (userStream) {
