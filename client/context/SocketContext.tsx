@@ -56,13 +56,13 @@ const SocketProvider: React.FC = ({ children }) => {
   // }, [])
   const peerRef = useRef<Peer.Instance>()
 
-  useEffect(() => {
-    peerRef.current = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: userStream || undefined,
-    })
-  }, [userStream])
+  // useEffect(() => {
+  //   peerRef.current = new Peer({
+  //     initiator: true,
+  //     trickle: false,
+  //     stream: userStream || undefined,
+  //   })
+  // }, [userStream])
 
   const memoizedValue = useMemo<SocketContextType>(() => {
     return {
@@ -103,6 +103,11 @@ const SocketProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (roomID && name) {
+      peerRef.current = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: userStream || undefined,
+      })
       // const peer = new Peer({
       //   initiator: true,
       //   trickle: false,
