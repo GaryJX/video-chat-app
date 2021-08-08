@@ -3,13 +3,6 @@ import { Request, Response } from "express";
 import { connect } from "mongoose";
 import { v4 as uuid } from "uuid";
 
-// connect("mongodb://localhost:27017/google-docs-clone", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useFindAndModify: false,
-//   useCreateIndex: true,
-// });
-
 type SocketEventMap = {
   // "send-changes": (delta: object) => void;
   // "receive-changes": (delta: object) => void;
@@ -43,15 +36,33 @@ const io = new Server(server, {
 
 server.listen(PORT, () => `Server is listening on port ${PORT}`);
 
+const roomConnections: { [key: string]: { name: string; userID: string }[] } =
+  {};
+
 io.on("connection", (socket: Socket) => {
   const userID = socket.id;
-  socket.on("join-room", ({ roomID, name, signal }) => {
+
+  socket.on("join-room", ({ roomID, name }) => {
+    console.log(roomConnections);
     socket.join(roomID);
-    socket.broadcast
-      .to(roomID)
-      .emit("user-connected", { name, signal, userID });
+    if (!roomConnections.hasOwnProperty(roomID)) {
+      roomConnections[roomID] = [];
+    }
+
+    if (roomConnections[roomID].length >= 1) {
+      // TODO: Currently only handling max 2 users in a room. Eventually allow more users
+      const alreadyJoinedUser = roomConnections[roomID][0];
+      socket.emit("user-connected", alreadyJoinedUser);
+    }
+
+    roomConnections[roomID].push({ name, userID });
+    socket.broadcast.to(roomID).emit("user-connected", { name, userID });
 
     socket.on("disconnect", () => {
+      roomConnections[roomID] =
+        roomConnections[roomID]?.filter((user) => user.userID !== userID) || [];
+      if (roomConnections[roomID].length === 0) delete roomConnections[roomID];
+
       socket.broadcast.to(roomID).emit("user-disconnected", userID);
     });
   });

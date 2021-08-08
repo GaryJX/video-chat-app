@@ -80,7 +80,11 @@ const VideoChatRoom: React.FC = () => {
     <div className="h-screen flex flex-row flex-wrap items-center justify-center p-10 pb-16">
       <div
         className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-gray-900"
-        style={{ aspectRatio: '4 / 3', zIndex: 1, borderRightWidth: '1px' }}
+        style={{
+          aspectRatio: '4 / 3',
+          zIndex: 1,
+          borderRightWidth: otherUserJoined ? '1px' : '2px',
+        }}
       >
         <div
           className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"

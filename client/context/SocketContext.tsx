@@ -10,8 +10,8 @@ import Peer from 'simple-peer'
 import { useRouter } from 'next/dist/client/router'
 
 // TODO: Use an environment variable for API URL
-const socket = io('https://video-chat-app-api.herokuapp.com/')
-// const socket = io('localhost:3001')
+// const socket = io('https://video-chat-app-api.herokuapp.com/')
+const socket = io('localhost:3001')
 
 type SocketContextType = {
   userStream: MediaStream | null
@@ -53,7 +53,7 @@ const SocketProvider: React.FC = ({ children }) => {
     } else {
       return null
     }
-  }, [userStream])
+  }, [])
 
   const memoizedValue = useMemo<SocketContextType>(() => {
     return {
@@ -78,29 +78,44 @@ const SocketProvider: React.FC = ({ children }) => {
   ])
 
   useEffect(() => {
-    if (roomID && name && peer) {
-      socket.emit('join-room', { roomID, name, signal: null })
+    if (roomID && name) {
+      socket.emit('join-room', { roomID, name })
 
-      console.log('@@@ CALLED')
-      peer.on('signal', (signal) => {
-        console.log('@@@ SIGNAL PEER REACHED')
-        console.log(signal)
-        socket.emit('join-room', { roomID, name, signal })
-        // socket.emit("")
-      })
-
-      peer.on('stream', (currentStream) => {
-        console.log('@@@ STREAM PEER REACHED')
-        setOtherStream(currentStream)
-      })
-
-      socket.on('user-connected', ({ name, signal }) => {
-        console.log('@@@ USER CONNECTED')
-        if (signal) peer.signal(signal)
+      socket.on('user-connected', ({ name, userID }) => {
+        console.log('@ Other User Joined', { name, userID })
         setOtherUserJoined(true)
       })
+
+      socket.on('user-disconnected', (userID) => {
+        setOtherUserJoined(false)
+      })
     }
-  }, [userStream, roomID, name, peer])
+  }, [roomID, name])
+
+  // useEffect(() => {
+  //   if (roomID && name && peer) {
+  //     socket.emit('join-room', { roomID, name, signal: null })
+
+  //     console.log('@@@ CALLED')
+  //     peer.on('signal', (signal) => {
+  //       console.log('@@@ SIGNAL PEER REACHED')
+  //       console.log(signal)
+  //       socket.emit('join-room', { roomID, name, signal })
+  //       // socket.emit("")
+  //     })
+
+  //     peer.on('stream', (currentStream) => {
+  //       console.log('@@@ STREAM PEER REACHED')
+  //       setOtherStream(currentStream)
+  //     })
+
+  //     socket.on('user-connected', ({ name, signal }) => {
+  //       console.log('@@@ USER CONNECTED')
+  //       if (signal) peer.signal(signal)
+  //       setOtherUserJoined(true)
+  //     })
+  //   }
+  // }, [userStream, roomID, name, peer])
 
   return (
     <SocketContext.Provider value={memoizedValue}>
