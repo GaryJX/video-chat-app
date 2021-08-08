@@ -123,6 +123,10 @@ const SocketProvider: React.FC = ({ children }) => {
         console.log('@@@ STREAM PEER REACHED')
         setOtherStream(stream)
       })
+
+      return () => {
+        console.log('@ Destroying peer')
+      }
     }
   }, [roomID, name, userStream])
 
