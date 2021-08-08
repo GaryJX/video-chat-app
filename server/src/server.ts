@@ -2,12 +2,12 @@ import { Server, Socket } from "socket.io";
 import { connect } from "mongoose";
 import { v4 as uuid } from "uuid";
 
-connect("mongodb://localhost:27017/google-docs-clone", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
+// connect("mongodb://localhost:27017/google-docs-clone", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useFindAndModify: false,
+//   useCreateIndex: true,
+// });
 
 type SocketEventMap = {
   // "send-changes": (delta: object) => void;
@@ -22,9 +22,10 @@ export type SocketEvent = keyof SocketEventMap;
 
 const PORT = Number(process.env.PORT) || 3001;
 console.log(`Starting socket.io server on port ${PORT}`);
+// TODO: Change this to an environment variable
 const io = new Server(PORT, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://garyjx-video-chat-app.vercel.app/",
     methods: ["GET", "POST"],
   },
 });
