@@ -16,49 +16,72 @@ const socket = io('https://video-chat-app-api.herokuapp.com/')
 type SocketContextType = {
   userStream: MediaStream | null
   otherStream: MediaStream | null
+  otherUserJoined: boolean
   name: string
   setUserStream: (stream: MediaStream | null) => void
   setRoomID: (roomID: string) => void
   setName: (name: string) => void
+  setOtherUserJoined: (otherUserJoined: boolean) => void
 }
 
 const SocketContext = createContext<SocketContextType>({
   userStream: null,
   otherStream: null,
+  otherUserJoined: false,
   name: '',
   setUserStream: () => {},
   setRoomID: () => {},
+  setOtherUserJoined: () => {},
   setName: () => {},
 })
 
 const SocketProvider: React.FC = ({ children }) => {
   const [userStream, setUserStream] = useState<MediaStream | null>(null)
-  const [roomID, setRoomID] = useState('')
-  const [name, setName] = useState('')
   const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
+  const [otherUserJoined, setOtherUserJoined] = useState(false)
+  const [roomID, setRoomID] = useState('')
+  const [name, setName] = useState('') // TODO: Handle this logic properly
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
 
   const peer: Peer.Instance | null = useMemo(() => {
-    return new Peer({
-      initiator: true,
-      trickle: false,
-      stream: userStream || undefined,
-    })
+    if (process.browser) {
+      return new Peer({
+        initiator: true,
+        trickle: false,
+        stream: userStream || undefined,
+      })
+    } else {
+      return null
+    }
   }, [userStream])
 
   const memoizedValue = useMemo<SocketContextType>(() => {
     return {
       userStream,
       otherStream,
+      otherUserJoined,
       name,
       setUserStream,
       setRoomID,
+      setOtherUserJoined,
       setName,
     }
-  }, [userStream, otherStream, name, setUserStream, setRoomID, setName])
+  }, [
+    userStream,
+    otherStream,
+    otherUserJoined,
+    name,
+    setUserStream,
+    setRoomID,
+    setOtherUserJoined,
+    setName,
+  ])
 
   useEffect(() => {
-    if (userStream && roomID && name && peer) {
+    if (roomID && name && peer) {
+      socket.emit('join-room', { roomID, name, signal: null })
+
+      console.log('@@@ CALLED')
       peer.on('signal', (signal) => {
         console.log('@@@ SIGNAL PEER REACHED')
         console.log(signal)
@@ -73,7 +96,8 @@ const SocketProvider: React.FC = ({ children }) => {
 
       socket.on('user-connected', ({ name, signal }) => {
         console.log('@@@ USER CONNECTED')
-        peer.signal(signal)
+        if (signal) peer.signal(signal)
+        setOtherUserJoined(true)
       })
     }
   }, [userStream, roomID, name, peer])

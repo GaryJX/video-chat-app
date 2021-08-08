@@ -7,8 +7,14 @@ import { useRouter } from 'next/dist/client/router'
 import VideoChatToolbar from '@/components/VideoChatToolbar'
 
 const VideoChatRoom: React.FC = () => {
-  const { userStream, otherStream, setUserStream, setRoomID } =
-    useContext(SocketContext)
+  const {
+    userStream,
+    otherStream,
+    setUserStream,
+    setRoomID,
+    otherUserJoined,
+    setOtherUserJoined,
+  } = useContext(SocketContext)
   const [loading, setLoading] = useState(false)
   const [videoOn, setVideoOn] = useState(false)
   const [audioOn, setAudioOn] = useState(false)
@@ -27,7 +33,7 @@ const VideoChatRoom: React.FC = () => {
   }, [router])
 
   useEffect(() => {
-    if (otherVideoRef && otherStream) {
+    if (otherVideoRef) {
       otherVideoRef.srcObject = otherStream
     }
   }, [otherVideoRef, otherStream])
@@ -74,7 +80,7 @@ const VideoChatRoom: React.FC = () => {
     <div className="h-screen flex flex-row flex-wrap items-center justify-center p-10 pb-16">
       <div
         className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-gray-900"
-        style={{ aspectRatio: '4 / 3', zIndex: 1 }}
+        style={{ aspectRatio: '4 / 3', zIndex: 1, borderRightWidth: '1px' }}
       >
         <div
           className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
@@ -95,10 +101,10 @@ const VideoChatRoom: React.FC = () => {
           Gary Xie
         </div>
       </div>
-      {otherStream && (
+      {otherUserJoined && (
         <div
           className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-gray-900"
-          style={{ aspectRatio: '4 / 3', zIndex: 1 }}
+          style={{ aspectRatio: '4 / 3', zIndex: 1, borderLeftWidth: '1px' }}
         >
           <div
             className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
