@@ -73,11 +73,14 @@ const VideoChatRoom: React.FC = () => {
   ) : (
     <div className="h-screen flex flex-row flex-wrap items-center justify-center p-10 pb-16">
       <div
-        className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900"
-        style={{ aspectRatio: '4 / 3' }}
+        className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-gray-900"
+        style={{ aspectRatio: '4 / 3', zIndex: 1 }}
       >
-        <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-          <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
+        <div
+          className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
+          style={{ zIndex: -1 }}
+        >
+          <div className="bg-gray-200 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
             GX
           </div>
         </div>
@@ -88,17 +91,20 @@ const VideoChatRoom: React.FC = () => {
           autoPlay
           className="w-full"
         />
-        <div className="absolute bottom-0 bg-gray-600 text-white w-full px-3 py-1">
+        <div className="absolute bottom-0 text-black bg-gray-200 dark:bg-gray-700 dark:text-white w-full px-3 py-1">
           Gary Xie
         </div>
       </div>
       {otherStream && (
         <div
-          className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900"
-          style={{ aspectRatio: '4 / 3' }}
+          className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-gray-50 dark:bg-gray-900"
+          style={{ aspectRatio: '4 / 3', zIndex: 1 }}
         >
-          <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
+          <div
+            className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center"
+            style={{ zIndex: -1 }}
+          >
+            <div className="bg-gray-200 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
               GX
             </div>
           </div>
@@ -108,7 +114,7 @@ const VideoChatRoom: React.FC = () => {
             autoPlay
             className="w-full"
           />
-          <div className="absolute bottom-0 bg-gray-600 text-white w-full px-3 py-1">
+          <div className="absolute bottom-0 text-black bg-gray-200 dark:bg-gray-700 dark:text-white w-full px-3 py-1">
             Gary Xie
           </div>
         </div>
