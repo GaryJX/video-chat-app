@@ -34,6 +34,7 @@ const VideoChatRoom: React.FC = () => {
 
   useEffect(() => {
     if (otherVideoRef) {
+      console.log({ otherStream })
       otherVideoRef.srcObject = otherStream
     }
   }, [otherVideoRef, otherStream])
@@ -45,7 +46,7 @@ const VideoChatRoom: React.FC = () => {
   const updateVideoAndAudioPermissions = async () => {
     if (userStream) {
       userStream.getTracks().forEach((track) => track.stop())
-      if (!videoOn) {
+      if (!videoOn && videoRef) {
         videoRef!.srcObject = null
       }
     }
@@ -57,7 +58,7 @@ const VideoChatRoom: React.FC = () => {
           audio: audioOn,
         })
 
-        videoRef!.srcObject = stream
+        if (videoRef) videoRef!.srcObject = stream
         setUserStream(stream)
         setLoading(false)
       } catch (err) {

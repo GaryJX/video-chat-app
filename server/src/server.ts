@@ -58,6 +58,10 @@ io.on("connection", (socket: Socket) => {
     roomConnections[roomID].push({ name, userID });
     socket.broadcast.to(roomID).emit("user-connected", { name, userID });
 
+    socket.on("peer-signal", (signal) => {
+      socket.broadcast.to(roomID).emit("peer-signal", signal);
+    });
+
     socket.on("disconnect", () => {
       roomConnections[roomID] =
         roomConnections[roomID]?.filter((user) => user.userID !== userID) || [];

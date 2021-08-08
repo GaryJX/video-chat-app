@@ -10,8 +10,8 @@ import Peer from 'simple-peer'
 import { useRouter } from 'next/dist/client/router'
 
 // TODO: Use an environment variable for API URL
-// const socket = io('https://video-chat-app-api.herokuapp.com/')
-const socket = io('localhost:3001')
+const socket = io('https://video-chat-app-api.herokuapp.com/')
+// const socket = io('localhost:3001')
 
 type SocketContextType = {
   userStream: MediaStream | null
@@ -91,6 +91,40 @@ const SocketProvider: React.FC = ({ children }) => {
       })
     }
   }, [roomID, name])
+
+  useEffect(() => {
+    if (roomID && name) {
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: userStream || undefined,
+      })
+
+      socket.on('peer-signal', (signal) => {
+        console.log('@ Peer Signal REACHED')
+        console.log({ signal })
+        if (signal) {
+          peer.signal(signal)
+        } else {
+          setOtherStream(null)
+        }
+      })
+
+      if (!userStream) {
+        socket.emit('peer-signal', null)
+      }
+
+      peer.on('signal', (signal) => {
+        console.log('@@ SIGNAL PEER REACHED')
+        socket.emit('peer-signal', signal)
+      })
+
+      peer.on('stream', (stream) => {
+        console.log('@@@ STREAM PEER REACHED')
+        setOtherStream(stream)
+      })
+    }
+  }, [roomID, name, userStream])
 
   // useEffect(() => {
   //   if (roomID && name && peer) {
