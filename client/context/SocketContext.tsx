@@ -34,7 +34,7 @@ const SocketContext = createContext<SocketContextType>({
 const SocketProvider: React.FC = ({ children }) => {
   const [userStream, setUserStream] = useState<MediaStream | null>(null)
   const [roomID, setRoomID] = useState('')
-  const [name, setName] = useState('') // TODO: Handle this logic properly
+  const [name, setName] = useState('')
   const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
 
