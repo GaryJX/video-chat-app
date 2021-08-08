@@ -39,6 +39,9 @@ const VideoChatRoom: React.FC = () => {
   const updateVideoAndAudioPermissions = async () => {
     if (userStream) {
       userStream.getTracks().forEach((track) => track.stop())
+      if (!videoOn) {
+        videoRef!.srcObject = null
+      }
     }
 
     if (audioOn || videoOn) {
@@ -69,7 +72,10 @@ const VideoChatRoom: React.FC = () => {
     </div>
   ) : (
     <div className="h-screen flex flex-row flex-wrap items-center justify-center p-10 pb-16">
-      <div className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900">
+      <div
+        className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900"
+        style={{ aspectRatio: '4 / 3' }}
+      >
         <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
           <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
             GX
@@ -87,7 +93,10 @@ const VideoChatRoom: React.FC = () => {
         </div>
       </div>
       {otherStream && (
-        <div className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900">
+        <div
+          className="w-1/2 relative border-2 border-gray-200 dark:border-gray-500 bg-white dark:bg-gray-900"
+          style={{ aspectRatio: '4 / 3' }}
+        >
           <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
             <div className="bg-gray-100 rounded-full w-20 h-20 flex items-center justify-center text-black font-semibold text-2xl dark:bg-gray-700 dark:text-white">
               GX
