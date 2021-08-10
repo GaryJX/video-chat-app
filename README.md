@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <div align="center">
   <h1 align="center">Video Chat App</h3>
-  <img src="public/demo.jpg" style="border-radius: 4px;">
+  <img src="client/public/demo.jpg" style="border-radius: 4px;">
 </div>
 
 <!-- ABOUT THE PROJECT -->
