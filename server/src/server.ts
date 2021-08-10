@@ -9,7 +9,7 @@ type SocketEventMap = {
   // "get-document": (documentId: string) => void;
   // "load-document": (documentId: string) => void;
   // "save-document": (document: object) => void;
-  "create-room": () => void; // TODO
+  "create-room": () => void;
   "created-room-id": string;
 };
 export type SocketEvent = keyof SocketEventMap;
@@ -26,7 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 const PORT = Number(process.env.PORT) || 3001;
-// TODO: Change this to an environment variable
+// TODO: Change this to an environment variable for CORS
 const io = new Server(server, {
   cors: {
     origin: "*",

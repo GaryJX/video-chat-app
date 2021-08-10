@@ -5,10 +5,9 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* // TODO: Improve my meta description content (e.g. maybe match whatever I come up with for my Hero section) */}
           <meta
             name="description"
-            content="Gary Xie is a software developer and student at University of Toronto."
+            content="A web application to connect online with others via video chat, using WebSocket and WebRTC protocols."
           />
         </Head>
         <body>
