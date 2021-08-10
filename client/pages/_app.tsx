@@ -10,6 +10,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     <>
       <Head>
         <title>Video Chat App</title>
+        <link rel="icon" href="/logo.svg" />
         <meta
           name="viewport"
           content="height=device-height, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover, shrink-to-fit=no"
