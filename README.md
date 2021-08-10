@@ -63,3 +63,8 @@ A web application to connect online with others via video chat, using WebSocket 
   ```sh
   git subtree push --prefix server heroku main
   ```
+
+#### Existing Bugs / Future Enhancements
+
+- [ ] Currently, only 2 people can join a room at a time. I plan on allowing multiple people to join at once.
+- [ ] Sometimes, if you toggle your camera/microphone on/off, the connection will break.
