@@ -9,9 +9,7 @@ import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
 import { useRouter } from 'next/dist/client/router'
 
-// TODO: Use an environment variable for API URL
-const socket = io('https://video-chat-app-api.herokuapp.com/')
-// const socket = io('http://localhost:3001')
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!)
 
 type SocketContextType = {
   userStream: MediaStream | null

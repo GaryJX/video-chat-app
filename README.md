@@ -64,18 +64,18 @@ A web application to connect online with others via video chat, using WebSocket 
    ```sh
    npm install
    ```
-10. Create `.env.local` by copying the template file `.env.sample`.
+10. Create `.env` by copying the template file `.env.sample`.
 
     ```sh
     cp .env.sample .env.local
     ```
 
-11. Update your `.env.local` file with front-end URL (e.g. for development, `http://localhost:3000`).
+11. Update your `.env` file with client URL (e.g. for development, `http://localhost:3000`).
 
     ```
-    # .env.local
+    # .env
 
-    NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+    CLIENT_URL=http://localhost:3000
     ```
 
 12. Start the back-end development server.
