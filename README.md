@@ -29,31 +29,32 @@ A web application to connect online with others via video chat, using WebSocket 
    ```sh
    git clone https://github.com/GaryJX/video-chat-app.git
    ```
-2. `cd` into the project root directory.
+2. `cd` into the `client` directory.
    ```sh
-   cd video-chat-app
+   cd video-chat-app/client
    ```
-3. Install dependencies.
+3. Install client dependencies.
    ```sh
    npm install
    ```
-4. Create `.env.local` by copying the template file `.env.sample`.
-   ```sh
-   cp .env.sample .env.local
-   ```
-5. Update `.env.local` with your API key.
-
-   ```
-   # .env.local
-
-   IP_API_KEY=<YOUR_API_KEY>
-   ```
-
-6. Start the development server.
+4. Start the front-end development server.
    ```sh
    npm run dev
    ```
-7. Open the application at http://localhost:3000/
+5. Open the application at http://localhost:3000/
+   <br>
+6. In a new terminal, `cd` into the `server` directory.
+   ```sh
+   cd server
+   ```
+7. Install server dependencies
+   ```sh
+   npm install
+   ```
+8. Start the back-end development server.
+   ```sh
+   npm run dev
+   ```
 
 #### Production Deployment
 
