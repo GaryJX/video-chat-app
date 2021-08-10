@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import { Request, Response } from "express";
 import { connect } from "mongoose";
 import { v4 as uuid } from "uuid";
+require("dotenv").config();
 
 type SocketEventMap = {
   // "send-changes": (delta: object) => void;
@@ -26,10 +27,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 const PORT = Number(process.env.PORT) || 3001;
-// TODO: Change this to an environment variable for CORS
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
   },
 });
