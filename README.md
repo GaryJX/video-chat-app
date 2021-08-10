@@ -1,5 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
+  <img src="client/public/logo.svg" width="100">
   <h1 align="center">Video Chat App</h3>
   <img src="client/public/demo.jpg" style="border-radius: 4px;">
 </div>
