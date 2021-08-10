@@ -41,11 +41,11 @@ const SocketContext = createContext<SocketContextType>({
 
 const SocketProvider: React.FC = ({ children }) => {
   const [userStream, setUserStream] = useState<MediaStream | null>(null)
-  const [otherStream, setOtherStream] = useState<MediaStream | null>(null) // TODO: This is just for testing
+  const [otherStream, setOtherStream] = useState<MediaStream | null>(null)
   const [otherUserJoined, setOtherUserJoined] = useState(false)
   const [otherUserName, setOtherUserName] = useState('')
   const [roomID, setRoomID] = useState('')
-  const [name, setName] = useState('') // TODO: Handle this logic properly
+  const [name, setName] = useState('')
   const [otherStreams, setOtherStreams] = useState<MediaStream[]>([])
   // const [isInitiator, setIsInitiator] = useState(false)
   const isInitiator = useRef(false)
