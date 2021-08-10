@@ -38,32 +38,60 @@ A web application to connect online with others via video chat, using WebSocket 
    ```sh
    npm install
    ```
-4. Start the front-end development server.
+4. Create `.env.local` by copying the template file `.env.sample`.
+   ```sh
+   cp .env.sample .env.local
+   ```
+5. Update your `.env.local` file with back-end server URL (e.g. for development, `http://localhost:3001`).
+
+   ```
+   # .env.local
+
+   NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+   ```
+
+6. Start the front-end development server.
    ```sh
    npm run dev
    ```
-5. Open the application at http://localhost:3000/
+7. Open the application at http://localhost:3000/.
    <br>
-6. In a new terminal, `cd` into the `server` directory.
+8. In a new terminal, `cd` into the `server` directory.
    ```sh
    cd server
    ```
-7. Install server dependencies
+9. Install server dependencies.
    ```sh
    npm install
    ```
-8. Start the back-end development server.
-   ```sh
-   npm run dev
-   ```
+10. Create `.env.local` by copying the template file `.env.sample`.
+
+    ```sh
+    cp .env.sample .env.local
+    ```
+
+11. Update your `.env.local` file with front-end URL (e.g. for development, `http://localhost:3000`).
+
+    ```
+    # .env.local
+
+    NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+    ```
+
+12. Start the back-end development server.
+
+    ```sh
+    npm run dev
+    ```
 
 #### Production Deployment
 
 - The `client` folder containing the front-end code is hosted on [Vercel](vercel.com), and is automatically rebuilt whenever a commit is pushed to the `main` branch
 - The `server` folder containing the server-side code is hosted on [Heroku](https://heroku.com/). To trigger a re-deployment, push the changes to Heroku's remote Git repository:
-  ```sh
-  git subtree push --prefix server heroku main
-  ```
+
+```sh
+git subtree push --prefix server heroku main
+```
 
 #### Existing Bugs / Future Enhancements
 
