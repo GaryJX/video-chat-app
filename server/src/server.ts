@@ -27,6 +27,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 const PORT = Number(process.env.PORT) || 3001;
+console.log({ CLIENT_URL: process.env.CLIENT_URL });
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
