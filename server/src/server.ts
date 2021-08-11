@@ -21,7 +21,6 @@ const cors = require("cors");
 const app = express();
 const server = require("http").createServer(app);
 
-app.use(cors());
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running");
 });
