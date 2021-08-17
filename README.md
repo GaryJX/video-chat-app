@@ -67,7 +67,7 @@ A web application to connect online with others via video chat, using WebSocket 
 10. Create `.env` by copying the template file `.env.sample`.
 
     ```sh
-    cp .env.sample .env.local
+    cp .env.sample .env
     ```
 
 11. Update your `.env` file with client URL (e.g. for development, `http://localhost:3000`).
