@@ -9,7 +9,7 @@
 
 ## About This Project
 
-A web application to connect online with others via video chat, using WebSocket and WebRTC protocols. View live demo at <a href="https://video-chat.garyxie.me/" target="_blank">video-chat.garyxie.me</a>
+A web application to connect online with others via video chat, using WebSocket and WebRTC protocols. View live demo at <a href="https://video-chat.garyxie.me/" target="_blank">video-chat.garyxie.me</a>.
 
 #### Built With
 
